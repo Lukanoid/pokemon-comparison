@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { getRandomPokemon } from './services/pokemonService';
 import { getTypeData } from './services/typeService';
 import { comparePokemonTypes } from './utils/battleLogic';
 import PokemonCard from './components/PokemonCard';
 import BattleResult from './components/BattleResult';
+import LoadPokemonButton from './components/LoadPokemonButton';
 
 function App() {
   const [currentPokemon, setCurrentPokemon] = useState(null);
@@ -20,7 +21,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  async function fetchPokemon() {
+  const fetchPokemon = useCallback(async () => {
     if (loading) return;
 
     setLoading(true);
@@ -70,7 +71,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [currentPokemon, loading]);
 
   return (
     <div className="mx-auto min-h-screen max-w-6xl px-6 py-10">
@@ -79,13 +80,10 @@ function App() {
       </h1>
 
       <div className="mb-8 flex justify-center">
-        <button
-          onClick={fetchPokemon}
-          disabled={loading}
-          className="rounded-lg bg-yellow-400 px-6 py-3 font-semibold text-gray-900 transition hover:bg-yellow-500 disabled:opacity-50"
-        >
-          {loading ? 'Loading...' : 'Load Random Pokémon'}
-        </button>
+        <LoadPokemonButton
+          onLoad={fetchPokemon}
+          loading={loading}
+        />
       </div>
 
       {error && (
