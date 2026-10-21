@@ -1,14 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { getRandomPokemon } from './services/pokemonService';
 import { getTypeData } from './services/typeService';
 import { comparePokemonTypes } from './utils/battleLogic';
 import PokemonCard from './components/PokemonCard';
 import BattleResult from './components/BattleResult';
 import LoadPokemonButton from './components/LoadPokemonButton';
+import { getStrongestPokemon } from './utils/pokemonStats';
+import StrongestPokemon from './components/StrongestPokemon';
 
 function App() {
   const [currentPokemon, setCurrentPokemon] = useState(null);
   const [previousPokemon, setPreviousPokemon] = useState(null);
+  const [pokemonHistory, setPokemonHistory] = useState([]);
 
   const [battleResult, setBattleResult] = useState(null);
 
@@ -52,6 +55,7 @@ function App() {
       setPreviousPokemon(currentPokemon);
       setCurrentPokemon(newPokemon);
       setBattleResult(result);
+      setPokemonHistory(prev => [...prev, newPokemon])
 
       if (result) {
         setStats(prevStats => ({
@@ -72,6 +76,10 @@ function App() {
       setLoading(false);
     }
   }, [currentPokemon, loading]);
+
+  const strongestPokemon = useMemo(() => {
+    return getStrongestPokemon(pokemonHistory);
+  }, [pokemonHistory]);
 
   return (
     <div className="mx-auto min-h-screen max-w-6xl px-6 py-10">
@@ -128,6 +136,8 @@ function App() {
           </p>
         </div>
       </div>
+
+      <StrongestPokemon pokemon={strongestPokemon} />
     </div>
   );
 }
