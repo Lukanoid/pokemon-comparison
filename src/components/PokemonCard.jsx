@@ -1,4 +1,6 @@
-function PokemonCard({ pokemon, title }) {
+import { memo } from 'react';
+
+const PokemonCard = memo(function PokemonCard({ pokemon, title }) {
     return (<div className="flex-1 rounded-xl border border-gray-300 bg-white p-6 text-center shadow-md">
         <h2 className="mb-4 text-xl font-bold text-gray-800">
             {title}
@@ -41,6 +43,6 @@ function PokemonCard({ pokemon, title }) {
             </div>
         )}
     </div>)
-}
+});
 
 export default PokemonCard;
