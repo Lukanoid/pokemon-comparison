@@ -82,62 +82,74 @@ function App() {
   }, [pokemonHistory]);
 
   return (
-    <div className="mx-auto min-h-screen max-w-6xl px-6 py-10">
-      <h1 className="mb-8 text-center text-4xl font-bold text-yellow-400">
-        Pokémon Comparison
-      </h1>
+    <div className="min-h-screen bg-gradient-to-b from-yellow-100 via-blue-50 to-white px-6 py-10">
+      <div className="mx-auto max-w-6xl">
+        <h1 className="mb-4 text-center text-5xl font-extrabold tracking-wide text-yellow-400 drop-shadow-[2px_2px_0px_#1e3a8a]">
+          Pokémon Comparison
+        </h1>
 
-      <div className="mb-8 flex justify-center">
-        <LoadPokemonButton
-          onLoad={fetchPokemon}
-          loading={loading}
-        />
-      </div>
-
-      {error && (
-        <p role="alert" className="mb-6 text-center text-red-500">
-          {error}
+        <p className="mb-8 text-center text-lg font-medium text-blue-900">
+          Catch random Pokémon and see who wins the type battle!
         </p>
-      )}
 
-      <div className="flex flex-col gap-6 md:flex-row">
-        <PokemonCard
-          title="Previous Pokémon"
-          pokemon={previousPokemon}
-        />
+        <div className="mb-10 flex justify-center">
+          <LoadPokemonButton
+            onLoad={fetchPokemon}
+            loading={loading}
+          />
+        </div>
 
-        <PokemonCard
-          title="Current Pokémon"
-          pokemon={currentPokemon}
-        />
+        {error && (
+          <p role="alert" className="mb-6 text-center font-semibold text-red-500">
+            {error}
+          </p>
+        )}
+
+        <div className="flex flex-col gap-6 md:flex-row">
+          <PokemonCard
+            title="Previous Pokémon"
+            pokemon={previousPokemon}
+          />
+
+          <PokemonCard
+            title="Current Pokémon"
+            pokemon={currentPokemon}
+          />
+        </div>
+
+        <BattleResult result={battleResult} />
+
+        <div className="mt-8 grid grid-cols-1 gap-4 text-center md:grid-cols-3">
+          <div className="rounded-3xl border-2 border-blue-200 bg-blue-100/80 p-5 shadow-md">
+            <p className="text-sm font-bold uppercase tracking-wide text-blue-700">
+              Type Matches
+            </p>
+            <p className="mt-2 text-4xl font-extrabold text-blue-900">
+              {stats.typeMatches}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border-2 border-green-200 bg-green-100/80 p-5 shadow-md">
+            <p className="text-sm font-bold uppercase tracking-wide text-green-700">
+              New Wins
+            </p>
+            <p className="mt-2 text-4xl font-extrabold text-green-800">
+              {stats.newWins}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border-2 border-orange-200 bg-orange-100/80 p-5 shadow-md">
+            <p className="text-sm font-bold uppercase tracking-wide text-orange-700">
+              Previous Wins
+            </p>
+            <p className="mt-2 text-4xl font-extrabold text-orange-800">
+              {stats.previousWins}
+            </p>
+          </div>
+        </div>
+
+        <StrongestPokemon pokemon={strongestPokemon} />
       </div>
-
-      <BattleResult result={battleResult} />
-
-      <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-        <div className="rounded-lg bg-blue-100 p-4">
-          <p className="text-sm text-blue-800">Type Matches</p>
-          <p className="text-3xl font-bold text-blue-900">
-            {stats.typeMatches}
-          </p>
-        </div>
-
-        <div className="rounded-lg bg-green-100 p-4">
-          <p className="text-sm text-green-800">New Wins</p>
-          <p className="text-3xl font-bold text-green-900">
-            {stats.newWins}
-          </p>
-        </div>
-
-        <div className="rounded-lg bg-orange-100 p-4">
-          <p className="text-sm text-orange-800">Previous Wins</p>
-          <p className="text-3xl font-bold text-orange-900">
-            {stats.previousWins}
-          </p>
-        </div>
-      </div>
-
-      <StrongestPokemon pokemon={strongestPokemon} />
     </div>
   );
 }
